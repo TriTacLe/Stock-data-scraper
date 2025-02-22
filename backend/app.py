@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 import yfinance as yf
+import ta
 #Importerer de forskjellige funksjonene fra de andre filene
 
 """
@@ -40,6 +41,10 @@ def stock_data(ticker: str):
     #Ta indikatorer
     ma_50 = float(stock.history(period="50d")["Close"].mean())
     ma_200 = float(stock.history(period="200d")["Close"].mean())
+    history["rsi"] = ta.momentum.RSIIndicator(history["Close"]).rsi()
+    rsi = float(history["rsi"].iloc[-1])  
+    macd = ta.trend.MACD(history["Close"]).macd().iloc[-1]
+
 
     return {
       "ticker": ticker,
@@ -52,11 +57,13 @@ def stock_data(ticker: str):
       "pe_ratio": pe,
       "dividend_yield": dividend_yield,
       "moving_avg_50": ma_50,
-      "moving_avg_200": ma_200
-
+      "moving_avg_200": ma_200,
+      "rsi": rsi,
+      "macd": macd
     }
   except Exception as e:
     raise HTTPException(status_code=404, detail="Error fetching stock data")
+
 
 #Run the api with uvicorn
 if __name__ == "__main__":
