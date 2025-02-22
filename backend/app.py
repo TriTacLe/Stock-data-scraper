@@ -21,7 +21,7 @@ def home():
 @app.get("/stock/{ticker}")
 def stock_data(ticker: str):
   try:
-    stock = yf.Ticker(ticket)
+    stock = yf.Ticker(ticker)
     price = stock.history(period="1d")["Close"].iloc[-1]
     
     return {
