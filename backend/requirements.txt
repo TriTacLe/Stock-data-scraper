@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+psycopg2-binary
+sqlalchemy
+beautifulsoup4
+requests
+scrapy
+scikit-learn
+tensorflow
+pandas
+numpy
+firebase-admin
+python-telegram-bot
+python-dotenv
+loguru
+
+pip install -r requirements.txt
