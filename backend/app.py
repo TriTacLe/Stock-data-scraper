@@ -3,11 +3,12 @@ import ta.momentum
 import yfinance as yf
 import ta
 import pandas as pd
+
 #Importerer de forskjellige funksjonene fra de andre filene
+from database import save_stock_data
 
 """
 from scraping import get_fundamental_data
-from database import save_stock_data
 from ml_model import predict_stock
 from notifications import send_telegram_notification
 """
@@ -90,7 +91,7 @@ def stock_data(ticker: str, period: str = "1d"):
     volume_avg = safe_float(history["Volume"].rolling(window=20).mean().iloc[-1])
     volume_trend = "Increasing" if volume and volume_avg and volume > volume_avg else "Decreasing"
 
-    return {
+    stock_data = {
       "ticker": ticker,
       "period": period,
       "price": price,
@@ -112,6 +113,14 @@ def stock_data(ticker: str, period: str = "1d"):
       "stochastic_d": stoch_d,
       "volume_trend": volume_trend
     }
+
+    #stock_data.pop("period", None)  
+
+    save_stock_data(stock_data)
+
+    return stock_data
+
+    
   except Exception as e:
       raise HTTPException(status_code=500, detail=f"Error fetching stock data: {str(e)}")
 
