@@ -21,6 +21,7 @@ try:
     print("Database connected ramandeep")
 except Exception as e:
   print(f"Error connection to database ramandeep: {str(e)}")
+
 class Stock(Base):
   __tablename__ = "stocks"
 
